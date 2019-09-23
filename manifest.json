@@ -5,7 +5,7 @@
     "content_scripts": [
         {
             "matches": [
-                "<all_urls>"
+                "https://submitty.cs.rpi.edu/*"
             ],
             "js": ["submitty.js"],
             "css": ["submitty.css"]
@@ -22,5 +22,10 @@
     ],
     "web_accessible_resources": [
         "res/late.png"  
-    ] 
+    ],
+    "icons": {
+        "16": "res/late16.png",
+        "48": "res/late48.png",
+        "128": "res/late128.png"
+    } 
 }

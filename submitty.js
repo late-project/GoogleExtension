@@ -3,9 +3,8 @@
  * Updated 9/23
  * Testing a LATE google extension add-on
  * TODO:
- * automatic user grabbing when on LATE page
- * manual sign in option
- * mongo integration?
+ * Fancy HTML widget landing
+ * ajax request to add assignments
  */
 
 function generate_key(index, title, url) {
@@ -24,6 +23,11 @@ var buttons = document.getElementsByClassName("btn btn-primary btn-nav btn-nav-s
 var titles = document.getElementsByClassName("course-title");
 
 var button_list = [];
+
+//init server requests
+xml = new XMLHttpRequest();
+xml.open("POST", "https://www.late.work/api/assignments", true);
+xml.setRequestHeader("Content-Type", "application/json");
 
 class Button {
     constructor(title, date, time, am_pm, url, index) {
