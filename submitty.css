@@ -1,0 +1,22 @@
+.late_add_button {
+	background-color:#006398;
+	-moz-border-radius:11px;
+	-webkit-border-radius:11px;
+	border-radius:5px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:18px;
+	width:100%;
+	text-decoration:none;
+	text-shadow:0px 2px 3px #283966;
+}
+.late_add_button:hover {
+	background-color:#00729E;
+}
+.late_add_button:active {
+	position:relative;
+	top:1px;
+}
+
