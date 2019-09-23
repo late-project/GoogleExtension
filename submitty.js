@@ -5,7 +5,7 @@
  * TODO:
  * automatic user grabbing when on LATE page
  * manual sign in option
- * mongo integration
+ * mongo integrationgit
  * chrome global and local storage
  */
 
