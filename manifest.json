@@ -5,9 +5,9 @@
     "content_scripts": [
         {
             "matches": [
-                "https://submitty.cs.rpi.edu/*"
+                "<all_urls>"
             ],
-            "js": ["submitty.js"],
+            "js": ["jquery.js", "submitty.js"],
             "css": ["submitty.css"]
         }
     ],
