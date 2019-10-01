@@ -1,3 +1,5 @@
+import { parse } from "path";
+
 /**
  * Aidan Lane
  * Updated 9/23
@@ -79,36 +81,50 @@ class Button {
     }
 };
 
-// add buttons that appear on submitty page
-for(var i = 0;i < buttons.length; i++) {
-    var subtitle = buttons[i].getElementsByClassName("subtitle"); // due date data that appears in button
-    var due_date_raw = "";
-    if(subtitle.length > 0)
-        due_date_raw = subtitle[0].innerText;
-    var parsed = due_date_raw.split(" ");
+parse_submitty = new function() {
+    // add buttons that appear on submitty page
+    for(var i = 0;i < buttons.length; i++) {
+        var subtitle = buttons[i].getElementsByClassName("subtitle"); // due date data that appears in button
+        var due_date_raw = "";
+        if(subtitle.length > 0)
+            due_date_raw = subtitle[0].innerText;
+        var parsed = due_date_raw.split(" ");
 
-    // parse raw button data into useful information
-    var title = titles[i].innerText;
-    var date = parsed[1];
-    var time = parsed[3];
-    var am_pm = parsed[4];
-    var url = buttons[i].href;
+        // parse raw button data into useful information
+        var title = titles[i].innerText;
+        var date = parsed[1];
+        var time = parsed[3];
+        var am_pm = parsed[4];
+        var url = buttons[i].href;
 
-    button_list.push(new Button(title, date, time, am_pm, url, i));
-    // appends HTML button as child to Submitty's submit button's div
-    buttons[i].parentElement.appendChild(button_list[i].button);
+        button_list.push(new Button(title, date, time, am_pm, url, i));
+        // appends HTML button as child to Submitty's submit button's div
+        buttons[i].parentElement.appendChild(button_list[i].button);
+    }
+
+    // retrieve data from chrome (asychronous)
+    chrome.storage.sync.get(null, function(result) { 
+        console.log(result); 
+        for(var i = 0; i < button_list.length; i++) {
+            var b = button_list[i];
+            var key = generate_key(b.index, b.title, b.url);
+
+            // if previous button state is clicked (true), update button data
+            if(result[key] == true) {
+                buttonClicked(b.button);
+            }
+        }
+    });
 }
 
-// retrieve data from chrome (asychronous)
-chrome.storage.sync.get(null, function(result) { 
-    console.log(result); 
-    for(var i = 0; i < button_list.length; i++) {
-        var b = button_list[i];
-        var key = generate_key(b.index, b.title, b.url);
+parse_lms = new function() {
 
-        // if previous button state is clicked (true), update button data
-        if(result[key] == true) {
-            buttonClicked(b.button);
-        }
-    }
-});
+}
+
+var current_url = window.location.toString();
+if(current_url.includes("https://submitty.cs.rpi.edu")) {
+    parse_submitty();
+}
+else if(current_url.includes("https://lms.rpi.edu")) {
+    parse_lms();
+}
