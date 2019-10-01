@@ -4,8 +4,20 @@
  * Testing a LATE google extension add-on
  * TODO:
  * Fancy HTML widget landing
- * ajax request to add assignments
+ * request to add assignments
+ * Fix 400 error (sec is set to common domain only)
  */
+
+var send_template = {
+    "assessmentType": "",
+    "courseCRN": "",
+    "description": "",
+    "dueDate": "",
+    "isRecurring": false,
+    "priority": 3,
+    "timeEstimate": 1,
+    "title": ""
+};
 
 function generate_key(index, title, url) {
     return (index.toString()+title+url).split(" ").join("").toLowerCase();
@@ -23,11 +35,6 @@ var buttons = document.getElementsByClassName("btn btn-primary btn-nav btn-nav-s
 var titles = document.getElementsByClassName("course-title");
 
 var button_list = [];
-
-//init server requests
-xml = new XMLHttpRequest();
-xml.open("POST", "https://www.late.work/api/assignments", true);
-xml.setRequestHeader("Content-Type", "application/json");
 
 class Button {
     constructor(title, date, time, am_pm, url, index) {
@@ -50,11 +57,29 @@ class Button {
             var key = generate_key(index, title, url);
             chrome.storage.sync.set({[key] : true}, function() { // generated key hold boolean on whether course was added or not
                 console.log("Chrome Storage Key Generated:", key);
+                // config json and send via http request
+                
+                let tc = Object.assign({}, send_template); // shallow copy of template
+                tc.assessmentType = "Assignment";
+                tc.description = "Test";
+                tc.title = "test title";
+
+                $.ajax({
+                    type: "POST",
+                    url: "https://www.late.work/api/assignments",
+                    crossDomain: true,
+                    contentType: "application/json; charset=utf-8",
+                    xhrFields: {withCredentials: true},
+                    data: JSON.stringify(tc),
+                    success: function(data) {},
+                    error: function(err) {}
+                });
             });
         };
     }
 };
 
+// add buttons that appear on submitty page
 for(var i = 0;i < buttons.length; i++) {
     var subtitle = buttons[i].getElementsByClassName("subtitle"); // due date data that appears in button
     var due_date_raw = "";
